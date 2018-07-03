@@ -1,0 +1,48 @@
+{
+  "name": "get-latest-version",
+  "version": "0.0.1",
+  "description": "Find the latest version of an npm module matching a given semver range",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "engines": {
+    "node": ">= 6"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/rexxars/get-latest-version.git"
+  },
+  "keywords": [
+    "npm",
+    "registry",
+    "version",
+    "semver"
+  ],
+  "author": "Espen Hovlandsdal <espen@hovlandsdal.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rexxars/get-latest-version/issues"
+  },
+  "homepage": "https://github.com/rexxars/get-latest-version#readme",
+  "devDependencies": {
+    "eslint": "^4",
+    "eslint-config-prettier": "^2.9.0",
+    "eslint-config-sanity": "^0.132.5",
+    "jest": "^23.2.0",
+    "prettier": "^1.13.7"
+  },
+  "dependencies": {
+    "get-it": "^4.0.4",
+    "registry-auth-token": "^3.3.2",
+    "registry-url": "^4.0.0",
+    "semver": "^5.5.0"
+  },
+  "jest": {
+    "verbose": true,
+    "testEnvironment": "node",
+    "collectCoverageFrom": [
+      "src/**.js"
+    ]
+  }
+}
