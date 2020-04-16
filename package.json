@@ -27,17 +27,17 @@
   },
   "homepage": "https://github.com/rexxars/get-latest-version#readme",
   "devDependencies": {
-    "eslint": "^5.16.0",
-    "eslint-config-prettier": "^4.1.0",
-    "eslint-config-sanity": "^0.140.0",
-    "jest": "^24.5.0",
-    "prettier": "^1.13.7"
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.10.1",
+    "eslint-config-sanity": "^1.149.0",
+    "jest": "^25.3.0",
+    "prettier": "^2.0.4"
   },
   "dependencies": {
-    "get-it": "^5.0.0",
-    "registry-auth-token": "^3.3.2",
-    "registry-url": "^5.0.0",
-    "semver": "^6.0.0"
+    "get-it": "^5.0.2",
+    "registry-auth-token": "^4.1.1",
+    "registry-url": "^5.1.0",
+    "semver": "^7.3.2"
   },
   "jest": {
     "verbose": true,
