@@ -8,12 +8,15 @@
     "posttest": "eslint ."
   },
   "engines": {
-    "node": ">= 6"
+    "node": ">=10"
   },
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com/rexxars/get-latest-version.git"
   },
+  "files": [
+    "src"
+  ],
   "keywords": [
     "npm",
     "registry",
