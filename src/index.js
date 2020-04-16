@@ -5,7 +5,7 @@ const registryUrl = require('registry-url')
 const registryAuthToken = require('registry-auth-token')
 const semver = require('semver')
 
-const isJson = contentType => /(application\/json|\+json)/.test(contentType || '')
+const isJson = (contentType) => /(application\/json|\+json)/.test(contentType || '')
 
 const shouldRetry = (err, num, options) => {
   const response = err.response || {statusCode: 500, headers: {}}
@@ -25,7 +25,7 @@ const httpRequest = getIt([
   httpErrors(),
   debug({namespace: 'get-latest-version'}),
   promise(),
-  retry({shouldRetry})
+  retry({shouldRetry}),
 ])
 
 const getLatestVersion = (pkgName, opts) => {
@@ -41,7 +41,7 @@ const getLatestVersion = (pkgName, opts) => {
   const request = options.request || httpRequest
 
   const headers = {
-    accept: 'application/vnd.npm.install-v1+json; q=1.0, application/json; q=0.8, */*'
+    accept: 'application/vnd.npm.install-v1+json; q=1.0, application/json; q=0.8, */*',
   }
 
   if (authInfo) {
@@ -49,7 +49,7 @@ const getLatestVersion = (pkgName, opts) => {
   }
 
   return request({url: pkgUrl, headers})
-    .then(res => {
+    .then((res) => {
       const data = res.body
       const range = options.range
 
@@ -70,7 +70,7 @@ const getLatestVersion = (pkgName, opts) => {
 
       return version
     })
-    .catch(err => {
+    .catch((err) => {
       if (err.response && err.response.statusCode === 404) {
         throw new Error(`Package \`${pkgName}\` doesn't exist`)
       }

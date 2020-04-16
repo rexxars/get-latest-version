@@ -24,12 +24,12 @@ test('can opt-out of sending auth info', () =>
 test('rejects if range cannot be satisfied', () =>
   getLatestVersion('react-markdown', '^1888.0.0')
     .then(shouldNotResolve)
-    .catch(err => expect(err.message).toMatch(/that satisfies/i)))
+    .catch((err) => expect(err.message).toMatch(/that satisfies/i)))
 
 test('rejects with package not found error', () =>
   getLatestVersion('##invalid##')
     .then(shouldNotResolve)
-    .catch(err => expect(err.message).toMatch(/doesn't exist/i)))
+    .catch((err) => expect(err.message).toMatch(/doesn't exist/i)))
 
 test('retries on 500-errors', () => {
   let tries = 0

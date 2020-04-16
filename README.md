@@ -16,12 +16,12 @@ npm install --save get-latest-version
 const getLatestVersion = require('get-latest-version')
 
 getLatestVersion('some-module')
-  .then(version => console.log(version)) // 1.0.0, or whichever is 'latest'
-  .catch(err => console.error(err))
+  .then((version) => console.log(version)) // 1.0.0, or whichever is 'latest'
+  .catch((err) => console.error(err))
 
 getLatestVersion('some-other-module', {range: '^1.0.0'})
-  .then(version => console.log(version)) // highest version matching ^1.0.0 range
-  .catch(err => console.error(err))
+  .then((version) => console.log(version)) // highest version matching ^1.0.0 range
+  .catch((err) => console.error(err))
 ```
 
 ## Disabling authenticated requests
@@ -30,8 +30,8 @@ By default, this module will read the authorization token for whichever registry
 
 ```js
 getLatestVersion('some-module', {auth: false})
-  .then(version => console.log(version))
-  .catch(err => console.error(err))
+  .then((version) => console.log(version))
+  .catch((err) => console.error(err))
 ```
 
 ## Developing
