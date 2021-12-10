@@ -30,10 +30,10 @@
   },
   "homepage": "https://github.com/rexxars/get-latest-version#readme",
   "devDependencies": {
-    "eslint": "^6.8.0",
-    "eslint-config-prettier": "^6.10.1",
-    "eslint-config-sanity": "^1.149.0",
-    "jest": "^25.3.0",
+    "eslint": "^8.4.1",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-config-sanity": "^5.1.0",
+    "jest": "^27.4.4",
     "prettier": "^2.0.4"
   },
   "dependencies": {
