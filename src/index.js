@@ -7,11 +7,11 @@ const semver = require('semver')
 
 const isJson = (contentType) => /(application\/json|\+json)/.test(contentType || '')
 
-const shouldRetry = (err, num, options) => {
+function shouldRetry(err, num, options) {
   const response = err.response || {statusCode: 500, headers: {}}
 
-  // allow retries on low-level errors (socket errors et al)
   return (
+    // allow retries on low-level errors (socket errors et al)
     retry.shouldRetry(err, num, options) ||
     // npm registry routinely fails, giving 503 and similar
     (response && response.statusCode >= 500) ||
@@ -28,7 +28,7 @@ const httpRequest = getIt([
   retry({shouldRetry}),
 ])
 
-const getLatestVersion = (pkgName, opts) => {
+async function getLatestVersion(pkgName, opts) {
   const scope = pkgName.split('/')[0]
   const regUrl = registryUrl(scope)
   const pkgUrl = url.resolve(regUrl, encodeURIComponent(pkgName).replace(/^%40/, '@'))
@@ -48,35 +48,38 @@ const getLatestVersion = (pkgName, opts) => {
     headers.authorization = `${authInfo.type} ${authInfo.token}`
   }
 
-  return request({url: pkgUrl, headers})
-    .then((res) => {
-      const data = res.body
-      const range = options.range
+  let res
+  try {
+    res = await request({url: pkgUrl, headers})
+  } catch (err) {
+    if (err.response && err.response.statusCode === 404) {
+      throw new Error(`Package \`${pkgName}\` doesn't exist`)
+    }
 
-      if (data['dist-tags'][range]) {
-        return data['dist-tags'][range]
-      }
+    throw err
+  }
 
-      if (data.versions[range]) {
-        return range
-      }
+  const data = res.body
+  const range = options.range
 
-      const versions = Object.keys(data.versions)
-      const version = semver.maxSatisfying(versions, range)
+  if (data['dist-tags'][range]) {
+    return data['dist-tags'][range]
+  }
 
-      if (!version) {
-        throw new Error(`No version exists that satisfies "${range}"`)
-      }
+  if (data.versions[range]) {
+    return range
+  }
 
-      return version
-    })
-    .catch((err) => {
-      if (err.response && err.response.statusCode === 404) {
-        throw new Error(`Package \`${pkgName}\` doesn't exist`)
-      }
+  const versions = Object.keys(data.versions)
+  const version = semver.maxSatisfying(versions, range)
 
-      throw err
-    })
+  if (!version) {
+    throw new Error(`No version exists that satisfies "${range}"`)
+  }
+
+  return options.includeLatest
+    ? {latest: data['dist-tags'].latest, inRange: version}
+    : version
 }
 
 getLatestVersion.request = httpRequest

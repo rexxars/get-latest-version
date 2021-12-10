@@ -37,3 +37,40 @@ test('retries on 500-errors', () => {
   const request = getLatestVersion.request.clone().use(injectResponse({inject}))
   return expect(getLatestVersion('npm', {request})).resolves.toMatch(versionPattern)
 })
+
+test('can include latest alongside in range', async () => {
+  const {inRange, latest} = await getLatestVersion('npm', {
+    range: '^1.0.0',
+    includeLatest: true,
+  })
+
+  expect(inRange).toBe('1.4.29')
+  expect(latest).toMatch(versionPattern)
+  expect(latest).not.toBe('1.4.29')
+})
+
+test('can include latest alongside in range (mocked)', () => {
+  const inject = () => ({
+    body: {
+      'dist-tags': {latest: '2.0.0', beta: '3.0.0-beta.0'},
+      versions: {
+        '1.0.0': {name: 'get-latest-version', version: '1.0.0'},
+        '1.1.0': {name: 'get-latest-version', version: '1.1.0'},
+        '1.2.0': {name: 'get-latest-version', version: '1.2.0'},
+        '2.0.0': {name: 'get-latest-version', version: '1.2.0'},
+        '3.0.0-beta.0': {name: 'get-latest-version', version: '3.0.0-beta.0'},
+      },
+    },
+  })
+  const request = getLatestVersion.request.clone().use(injectResponse({inject}))
+  return expect(
+    getLatestVersion('get-latest-version', {
+      request,
+      range: '^1.0.0',
+      includeLatest: true,
+    })
+  ).resolves.toEqual({
+    inRange: '1.2.0',
+    latest: '2.0.0',
+  })
+})

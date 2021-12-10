@@ -22,6 +22,12 @@ getLatestVersion('some-module')
 getLatestVersion('some-other-module', {range: '^1.0.0'})
   .then((version) => console.log(version)) // highest version matching ^1.0.0 range
   .catch((err) => console.error(err))
+
+// Returns both the highest in the given range and the actual `latest` tag
+// Note that this differens in that the return value is an object
+getLatestVersion('@sanity/base', {range: '^1.0.0', includeLatest: true})
+  .then((versions) => console.log(versions)) // {inRange: '1.150.8', latest '2.23.0'}
+  .catch((err) => console.error(err))
 ```
 
 ## Disabling authenticated requests
