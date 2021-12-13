@@ -74,3 +74,55 @@ test('can include latest alongside in range (mocked)', () => {
     latest: '2.0.0',
   })
 })
+
+test('can include latest alongside in range (with exact tag match)', () => {
+  const inject = () => ({
+    body: {
+      'dist-tags': {latest: '2.0.0', beta: '3.0.0-beta.0'},
+      versions: {
+        '1.0.0': {name: 'get-latest-version', version: '1.0.0'},
+        '1.1.0': {name: 'get-latest-version', version: '1.1.0'},
+        '1.2.0': {name: 'get-latest-version', version: '1.2.0'},
+        '2.0.0': {name: 'get-latest-version', version: '1.2.0'},
+        '3.0.0-beta.0': {name: 'get-latest-version', version: '3.0.0-beta.0'},
+      },
+    },
+  })
+  const request = getLatestVersion.request.clone().use(injectResponse({inject}))
+  return expect(
+    getLatestVersion('get-latest-version', {
+      request,
+      range: 'beta',
+      includeLatest: true,
+    })
+  ).resolves.toEqual({
+    inRange: '3.0.0-beta.0',
+    latest: '2.0.0',
+  })
+})
+
+test('can include latest alongside in range (with exact version match)', () => {
+  const inject = () => ({
+    body: {
+      'dist-tags': {latest: '2.0.0', beta: '3.0.0-beta.0'},
+      versions: {
+        '1.0.0': {name: 'get-latest-version', version: '1.0.0'},
+        '1.1.0': {name: 'get-latest-version', version: '1.1.0'},
+        '1.2.0': {name: 'get-latest-version', version: '1.2.0'},
+        '2.0.0': {name: 'get-latest-version', version: '1.2.0'},
+        '3.0.0-beta.0': {name: 'get-latest-version', version: '3.0.0-beta.0'},
+      },
+    },
+  })
+  const request = getLatestVersion.request.clone().use(injectResponse({inject}))
+  return expect(
+    getLatestVersion('get-latest-version', {
+      request,
+      range: '1.2.0',
+      includeLatest: true,
+    })
+  ).resolves.toEqual({
+    inRange: '1.2.0',
+    latest: '2.0.0',
+  })
+})

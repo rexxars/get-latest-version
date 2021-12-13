@@ -63,11 +63,15 @@ async function getLatestVersion(pkgName, opts) {
   const range = options.range
 
   if (data['dist-tags'][range]) {
-    return data['dist-tags'][range]
+    return options.includeLatest
+      ? {latest: data['dist-tags'].latest, inRange: data['dist-tags'][range]}
+      : data['dist-tags'][range]
   }
 
   if (data.versions[range]) {
-    return range
+    return options.includeLatest
+      ? {latest: data['dist-tags'].latest, inRange: range}
+      : range
   }
 
   const versions = Object.keys(data.versions)
