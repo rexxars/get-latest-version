@@ -3,6 +3,7 @@
   "version": "3.0.1",
   "description": "Find the latest version of an npm module matching a given semver range",
   "main": "src/index.js",
+  "types": "src/index.d.ts",
   "scripts": {
     "test": "jest",
     "posttest": "eslint ."
