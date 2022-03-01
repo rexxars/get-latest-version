@@ -11,17 +11,17 @@ declare namespace getLatestVersion {
   }
   interface ResolvedVersions {
     latest: string
-    inRange: string
+    inRange: string | undefined
   }
 }
 declare function getLatestVersion(
   pkgName: string,
   optionsOrRange?: string
-): Promise<string>
+): Promise<string | undefined>
 declare function getLatestVersion(
   pkgName: string,
   optionsOrRange: getLatestVersion.Options
-): Promise<string>
+): Promise<string | undefined>
 declare function getLatestVersion(
   pkgName: string,
   optionsOrRange: getLatestVersion.WithLatestOptions

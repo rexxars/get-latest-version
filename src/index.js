@@ -61,29 +61,26 @@ async function getLatestVersion(pkgName, opts) {
 
   const data = res.body
   const range = options.range
+  const latest = data['dist-tags'].latest
 
   if (data['dist-tags'][range]) {
     return options.includeLatest
-      ? {latest: data['dist-tags'].latest, inRange: data['dist-tags'][range]}
+      ? {latest, inRange: data['dist-tags'][range]}
       : data['dist-tags'][range]
   }
 
   if (data.versions[range]) {
-    return options.includeLatest
-      ? {latest: data['dist-tags'].latest, inRange: range}
-      : range
+    return options.includeLatest ? {latest, inRange: range} : range
   }
 
   const versions = Object.keys(data.versions)
   const version = semver.maxSatisfying(versions, range)
 
-  if (!version) {
-    throw new Error(`No version exists that satisfies "${range}"`)
+  if (version) {
+    return options.includeLatest ? {latest, inRange: version} : version
   }
 
-  return options.includeLatest
-    ? {latest: data['dist-tags'].latest, inRange: version}
-    : version
+  return options.includeLatest ? {latest, inRange: undefined} : undefined
 }
 
 getLatestVersion.request = httpRequest

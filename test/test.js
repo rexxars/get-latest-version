@@ -21,11 +21,6 @@ test('can get specific version', () =>
 test('can opt-out of sending auth info', () =>
   expect(getLatestVersion('npm', {range: '^1.0.0', auth: false})).resolves.toBe('1.4.29'))
 
-test('rejects if range cannot be satisfied', () =>
-  getLatestVersion('react-markdown', '^1888.0.0')
-    .then(shouldNotResolve)
-    .catch((err) => expect(err.message).toMatch(/that satisfies/i)))
-
 test('rejects with package not found error', () =>
   getLatestVersion('##invalid##')
     .then(shouldNotResolve)
@@ -125,4 +120,16 @@ test('can include latest alongside in range (with exact version match)', () => {
     inRange: '1.2.0',
     latest: '2.0.0',
   })
+})
+
+test('returns undefined if range cannot be satisfied', () =>
+  expect(getLatestVersion('react-markdown', '^1888.0.0')).resolves.toBe(undefined))
+
+test('returns undefined but includes latest if range cannot be satisfied in `includeLatest` mode', async () => {
+  const versions = await getLatestVersion('@sanity/components', {
+    range: 'lol-non-existant-tag',
+    includeLatest: true,
+  })
+  expect(versions.inRange).toBe(undefined)
+  expect(versions.latest).toMatch(/^\d+.\d+.\d+$/)
 })
