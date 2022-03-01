@@ -1,6 +1,6 @@
 {
   "name": "get-latest-version",
-  "version": "3.0.2",
+  "version": "4.0.0",
   "description": "Find the latest version of an npm module matching a given semver range",
   "main": "src/index.js",
   "types": "src/index.d.ts",
