@@ -1,3 +1,7 @@
+# 4.0.0
+
+- **BREAKING:** Now returns `undefined` if no version in range can be found, instead of throwing
+
 # 3.0.2
 
 - Added TypeScript definition
