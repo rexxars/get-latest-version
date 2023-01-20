@@ -1,3 +1,7 @@
+# 5.0.0
+
+- **BREAKING:** Require node.js version 14.18 or higher
+
 # 4.0.0
 
 - **BREAKING:** Now returns `undefined` if no version in range can be found, instead of throwing

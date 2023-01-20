@@ -1,5 +1,5 @@
 const url = require('url')
-const getIt = require('get-it')
+const {getIt} = require('get-it')
 const {debug, retry, promise, httpErrors, jsonResponse} = require('get-it/middleware')
 const registryUrl = require('registry-url')
 const registryAuthToken = require('registry-auth-token')
