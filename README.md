@@ -2,7 +2,7 @@
 
 Find the latest version of an npm module matching a given semver range
 
-[![npm version](https://img.shields.io/npm/v/get-latest-version.svg?style=flat-square)](https://www.npmjs.com/package/get-latest-version)[![Build status](https://img.shields.io/github/workflow/status/rexxars/get-latest-version/test?style=flat-square)](https://github.com/rexxars/get-latest-version/actions/workflows/test.yml)
+[![npm version](https://img.shields.io/npm/v/get-latest-version.svg?style=flat-square)](https://www.npmjs.com/package/get-latest-version)[![Build status](https://img.shields.io/github/actions/workflow/status/rexxars/get-latest-version/test.yml?branch=main&style=flat-square)](https://github.com/rexxars/get-latest-version/actions/workflows/test.yml)
 
 ## Installing
 
