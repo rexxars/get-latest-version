@@ -9,7 +9,7 @@
     "posttest": "eslint ."
   },
   "engines": {
-    "node": ">=12"
+    "node": ">=14.18"
   },
   "repository": {
     "type": "git",
