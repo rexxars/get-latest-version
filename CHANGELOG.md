@@ -1,3 +1,7 @@
+# 5.0.1
+
+- Fixed a bug where getting the latest version might crash when an invalid npmrc file was found
+
 # 5.0.0
 
 - **BREAKING:** Require node.js version 14.18 or higher
