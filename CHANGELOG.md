@@ -1,3 +1,7 @@
+# 5.1.0
+
+- Added new `registryUrl` option
+
 # 5.0.1
 
 - Fixed a bug where getting the latest version might crash when an invalid npmrc file was found

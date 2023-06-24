@@ -20,6 +20,14 @@ function shouldRetry(err, num, options) {
   )
 }
 
+function resolveRegistryUrl(pkgName, options) {
+  if (options.registryUrl) {
+    return options.registryUrl
+  }
+  const scope = pkgName.split('/')[0]
+  return registryUrl(scope);
+}
+
 const httpRequest = getIt([
   jsonResponse({force: true}),
   httpErrors(),
@@ -29,14 +37,13 @@ const httpRequest = getIt([
 ])
 
 async function getLatestVersion(pkgName, opts) {
-  const scope = pkgName.split('/')[0]
-  const regUrl = registryUrl(scope)
-  const pkgUrl = url.resolve(regUrl, encodeURIComponent(pkgName).replace(/^%40/, '@'))
   const options =
     typeof opts === 'string'
       ? {range: opts, auth: true}
       : Object.assign({range: 'latest', auth: true}, opts)
 
+  const regUrl = resolveRegistryUrl(pkgName, options)
+  const pkgUrl = url.resolve(regUrl, encodeURIComponent(pkgName).replace(/^%40/, '@'))
   const authInfo = options.auth && registryAuthToken(regUrl, {recursive: true})
   const request = options.request || httpRequest
 

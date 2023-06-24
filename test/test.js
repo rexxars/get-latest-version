@@ -21,6 +21,18 @@ test('can get specific version', () =>
 test('can opt-out of sending auth info', () =>
   expect(getLatestVersion('npm', {range: '^1.0.0', auth: false})).resolves.toBe('1.4.29'))
 
+test('can use custom registry', () => {
+  const inject = (evt) => {
+    expect(evt.context.options.url).toBe('https://custom-registry.npmjs.org/@some-scope%2Fsome-library')
+    return { body: { 'dist-tags': { latest: '1.0.0' }} }
+  }
+  const request = getLatestVersion.request.clone().use(injectResponse({inject}))
+  return getLatestVersion('@some-scope/some-library', {
+    request,
+    registryUrl: 'https://custom-registry.npmjs.org/'
+  })
+})
+
 test('rejects with package not found error', () =>
   getLatestVersion('##invalid##')
     .then(shouldNotResolve)
