@@ -2,6 +2,7 @@ declare namespace getLatestVersion {
   interface BaseOptions {
     readonly auth?: boolean
     readonly range?: string
+    readonly registryUrl?: string
   }
   interface WithLatestOptions extends BaseOptions {
     readonly includeLatest: true

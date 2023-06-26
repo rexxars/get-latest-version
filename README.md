@@ -40,6 +40,17 @@ getLatestVersion('some-module', {auth: false})
   .catch((err) => console.error(err))
 ```
 
+## Using custom registry
+
+By default, module utilizes [registry-url](https://www.npmjs.com/package/registry-url) to resolve registry URL from NPM configuration files. However, if you need to set up the registry programmatically, you can make use of the `registryUrl` option:
+
+```js
+getLatestVersion('some-module', {registryUrl: 'https://some-custom-registry.com'})
+  .then((version) => console.log(version))
+  .catch((err) => console.error(err))
+```
+
+
 ## Developing
 
 ```bash
