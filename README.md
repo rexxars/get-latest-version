@@ -50,7 +50,6 @@ getLatestVersion('some-module', {registryUrl: 'https://some-custom-registry.com'
   .catch((err) => console.error(err))
 ```
 
-
 ## Developing
 
 ```bash

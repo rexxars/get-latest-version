@@ -16,15 +16,15 @@ export interface ResolvedVersions {
 
 declare function getLatestVersion(
   pkgName: string,
-  optionsOrRange?: string
+  optionsOrRange?: string,
 ): Promise<string | undefined>
 declare function getLatestVersion(
   pkgName: string,
-  optionsOrRange: Options
+  optionsOrRange: Options,
 ): Promise<string | undefined>
 declare function getLatestVersion(
   pkgName: string,
-  optionsOrRange: WithLatestOptions
+  optionsOrRange: WithLatestOptions,
 ): Promise<ResolvedVersions>
 
 export default getLatestVersion
