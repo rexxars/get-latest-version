@@ -1,7 +1,7 @@
 import {test} from 'node:test'
 import assert from 'node:assert/strict'
 import {injectResponse} from 'get-it/middleware'
-import getLatestVersion from '../src/index.js'
+import {getLatestVersion} from '../src/index.js'
 
 const versionPattern = /^\d+\.\d+\.\d+$/
 
