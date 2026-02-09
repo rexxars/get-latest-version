@@ -6,7 +6,7 @@ Find the latest version of an npm module matching a given semver range
 
 ## Requirements
 
-- Node.js 18 or higher
+- Node.js 20 or higher
 - This package is now ESM-only and uses named exports. If you need CommonJS support, use version 5.x.
 
 ## Installing
