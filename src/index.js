@@ -1,9 +1,9 @@
-const url = require('url')
-const {getIt} = require('get-it')
-const {debug, retry, promise, httpErrors, jsonResponse} = require('get-it/middleware')
-const registryUrl = require('registry-url')
-const registryAuthToken = require('registry-auth-token')
-const semver = require('semver')
+import url from 'node:url'
+import {getIt} from 'get-it'
+import {debug, retry, promise, httpErrors, jsonResponse} from 'get-it/middleware'
+import registryUrl from 'registry-url'
+import registryAuthToken from 'registry-auth-token'
+import semver from 'semver'
 
 const isJson = (contentType) => /(application\/json|\+json)/.test(contentType || '')
 
@@ -92,4 +92,4 @@ async function getLatestVersion(pkgName, opts) {
 
 getLatestVersion.request = httpRequest
 
-module.exports = getLatestVersion
+export default getLatestVersion
