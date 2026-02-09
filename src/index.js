@@ -1,14 +1,22 @@
-import url from 'node:url'
 import {getIt} from 'get-it'
-import {debug, retry, promise, httpErrors, jsonResponse} from 'get-it/middleware'
-import registryUrl from 'registry-url'
+import {debug, httpErrors, jsonResponse, promise, retry} from 'get-it/middleware'
+import url from 'node:url'
 import registryAuthToken from 'registry-auth-token'
+import registryUrl from 'registry-url'
 import semver from 'semver'
 
 const isJson = (contentType) => /(application\/json|\+json)/.test(contentType || '')
 
+function resolveRegistryUrl(pkgName, options) {
+  if (options.registryUrl) {
+    return options.registryUrl
+  }
+  const scope = pkgName.split('/')[0]
+  return registryUrl(scope)
+}
+
 function shouldRetry(err, num, options) {
-  const response = err.response || {statusCode: 500, headers: {}}
+  const response = err.response || {headers: {}, statusCode: 500}
 
   return (
     // allow retries on low-level errors (socket errors et al)
@@ -18,14 +26,6 @@ function shouldRetry(err, num, options) {
     // npm registry sometimes returns 2xx with HTML content
     (response.statusCode < 300 && !isJson(response.headers['content-type']))
   )
-}
-
-function resolveRegistryUrl(pkgName, options) {
-  if (options.registryUrl) {
-    return options.registryUrl
-  }
-  const scope = pkgName.split('/')[0]
-  return registryUrl(scope)
 }
 
 const httpRequest = getIt([
@@ -39,8 +39,8 @@ const httpRequest = getIt([
 async function getLatestVersion(pkgName, opts) {
   const options =
     typeof opts === 'string'
-      ? {range: opts, auth: true}
-      : Object.assign({range: 'latest', auth: true}, opts)
+      ? {auth: true, range: opts}
+      : Object.assign({auth: true, range: 'latest'}, opts)
 
   const regUrl = resolveRegistryUrl(pkgName, options)
   const pkgUrl = url.resolve(regUrl, encodeURIComponent(pkgName).replace(/^%40/, '@'))
@@ -57,13 +57,13 @@ async function getLatestVersion(pkgName, opts) {
 
   let res
   try {
-    res = await request({url: pkgUrl, headers})
-  } catch (err) {
-    if (err.response && err.response.statusCode === 404) {
+    res = await request({headers, url: pkgUrl})
+  } catch (error) {
+    if (error.response && error.response.statusCode === 404) {
       throw new Error(`Package \`${pkgName}\` doesn't exist`)
     }
 
-    throw err
+    throw error
   }
 
   const data = res.body
@@ -72,22 +72,22 @@ async function getLatestVersion(pkgName, opts) {
 
   if (data['dist-tags'][range]) {
     return options.includeLatest
-      ? {latest, inRange: data['dist-tags'][range]}
+      ? {inRange: data['dist-tags'][range], latest}
       : data['dist-tags'][range]
   }
 
   if (data.versions[range]) {
-    return options.includeLatest ? {latest, inRange: range} : range
+    return options.includeLatest ? {inRange: range, latest} : range
   }
 
   const versions = Object.keys(data.versions)
   const version = semver.maxSatisfying(versions, range)
 
   if (version) {
-    return options.includeLatest ? {latest, inRange: version} : version
+    return options.includeLatest ? {inRange: version, latest} : version
   }
 
-  return options.includeLatest ? {latest, inRange: undefined} : undefined
+  return options.includeLatest ? {inRange: undefined, latest} : undefined
 }
 
 getLatestVersion.request = httpRequest
