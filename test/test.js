@@ -1,6 +1,7 @@
-import {test} from 'node:test'
-import assert from 'node:assert/strict'
 import {injectResponse} from 'get-it/middleware'
+import assert from 'node:assert/strict'
+import {test} from 'node:test'
+
 import {getLatestVersion} from '../src/index.js'
 
 const versionPattern = /^\d+\.\d+\.\d+$/
@@ -23,7 +24,7 @@ test('can get specific version', async () => {
 
 test('can opt-out of sending auth info', async () => {
   assert.strictEqual(
-    await getLatestVersion('npm', {range: '^1.0.0', auth: false}),
+    await getLatestVersion('npm', {auth: false, range: '^1.0.0'}),
     '1.4.29',
   )
 })
@@ -38,8 +39,8 @@ test('can use custom registry', async () => {
   }
   const request = getLatestVersion.request.clone().use(injectResponse({inject}))
   await getLatestVersion('@some-scope/some-library', {
-    request,
     registryUrl: 'https://custom-registry.npmjs.org/',
+    request,
   })
 })
 
@@ -49,15 +50,15 @@ test('rejects with package not found error', async () => {
 
 test('retries on 500-errors', async () => {
   let tries = 0
-  const inject = (evt, prev) => (++tries === 1 ? {statusCode: 500} : null)
+  const inject = (_evt, _prev) => (++tries === 1 ? {statusCode: 500} : null)
   const request = getLatestVersion.request.clone().use(injectResponse({inject}))
   assert.match(await getLatestVersion('npm', {request}), versionPattern)
 })
 
 test('can include latest alongside in range', async () => {
   const {inRange, latest} = await getLatestVersion('npm', {
-    range: '^1.0.0',
     includeLatest: true,
+    range: '^1.0.0',
   })
 
   assert.strictEqual(inRange, '1.4.29')
@@ -68,7 +69,7 @@ test('can include latest alongside in range', async () => {
 test('can include latest alongside in range (mocked)', async () => {
   const inject = () => ({
     body: {
-      'dist-tags': {latest: '2.0.0', beta: '3.0.0-beta.0'},
+      'dist-tags': {beta: '3.0.0-beta.0', latest: '2.0.0'},
       versions: {
         '1.0.0': {name: 'get-latest-version', version: '1.0.0'},
         '1.1.0': {name: 'get-latest-version', version: '1.1.0'},
@@ -80,9 +81,9 @@ test('can include latest alongside in range (mocked)', async () => {
   })
   const request = getLatestVersion.request.clone().use(injectResponse({inject}))
   const result = await getLatestVersion('get-latest-version', {
-    request,
-    range: '^1.0.0',
     includeLatest: true,
+    range: '^1.0.0',
+    request,
   })
   assert.deepStrictEqual(result, {
     inRange: '1.2.0',
@@ -93,7 +94,7 @@ test('can include latest alongside in range (mocked)', async () => {
 test('can include latest alongside in range (with exact tag match)', async () => {
   const inject = () => ({
     body: {
-      'dist-tags': {latest: '2.0.0', beta: '3.0.0-beta.0'},
+      'dist-tags': {beta: '3.0.0-beta.0', latest: '2.0.0'},
       versions: {
         '1.0.0': {name: 'get-latest-version', version: '1.0.0'},
         '1.1.0': {name: 'get-latest-version', version: '1.1.0'},
@@ -105,9 +106,9 @@ test('can include latest alongside in range (with exact tag match)', async () =>
   })
   const request = getLatestVersion.request.clone().use(injectResponse({inject}))
   const result = await getLatestVersion('get-latest-version', {
-    request,
-    range: 'beta',
     includeLatest: true,
+    range: 'beta',
+    request,
   })
   assert.deepStrictEqual(result, {
     inRange: '3.0.0-beta.0',
@@ -118,7 +119,7 @@ test('can include latest alongside in range (with exact tag match)', async () =>
 test('can include latest alongside in range (with exact version match)', async () => {
   const inject = () => ({
     body: {
-      'dist-tags': {latest: '2.0.0', beta: '3.0.0-beta.0'},
+      'dist-tags': {beta: '3.0.0-beta.0', latest: '2.0.0'},
       versions: {
         '1.0.0': {name: 'get-latest-version', version: '1.0.0'},
         '1.1.0': {name: 'get-latest-version', version: '1.1.0'},
@@ -130,9 +131,9 @@ test('can include latest alongside in range (with exact version match)', async (
   })
   const request = getLatestVersion.request.clone().use(injectResponse({inject}))
   const result = await getLatestVersion('get-latest-version', {
-    request,
-    range: '1.2.0',
     includeLatest: true,
+    range: '1.2.0',
+    request,
   })
   assert.deepStrictEqual(result, {
     inRange: '1.2.0',
@@ -146,8 +147,8 @@ test('returns undefined if range cannot be satisfied', async () => {
 
 test('returns undefined but includes latest if range cannot be satisfied in `includeLatest` mode', async () => {
   const versions = await getLatestVersion('@sanity/components', {
-    range: 'lol-non-existant-tag',
     includeLatest: true,
+    range: 'lol-non-existant-tag',
   })
   assert.strictEqual(versions.inRange, undefined)
   assert.match(versions.latest, /^\d+.\d+.\d+$/)
