@@ -2,14 +2,21 @@
   "name": "get-latest-version",
   "version": "5.1.0",
   "description": "Find the latest version of an npm module matching a given semver range",
+  "type": "module",
   "main": "src/index.js",
   "types": "src/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.d.ts",
+      "default": "./src/index.js"
+    }
+  },
   "scripts": {
-    "test": "jest",
+    "test": "node --test test/test.js",
     "posttest": "eslint ."
   },
   "engines": {
-    "node": ">=14.18"
+    "node": ">=18"
   },
   "repository": {
     "type": "git",
@@ -40,16 +47,9 @@
     "semantic-release": "^25.0.3"
   },
   "dependencies": {
-    "get-it": "^8.0.9",
-    "registry-auth-token": "^5.0.2",
-    "registry-url": "^5.1.0",
-    "semver": "^7.3.8"
-  },
-  "jest": {
-    "verbose": true,
-    "testEnvironment": "node",
-    "collectCoverageFrom": [
-      "src/**.js"
-    ]
+    "get-it": "^8.7.0",
+    "registry-auth-token": "^5.1.1",
+    "registry-url": "^7.2.0",
+    "semver": "^7.7.4"
   }
 }
