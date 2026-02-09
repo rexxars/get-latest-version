@@ -92,4 +92,4 @@ async function getLatestVersion(pkgName, opts) {
 
 getLatestVersion.request = httpRequest
 
-export default getLatestVersion
+export {getLatestVersion}

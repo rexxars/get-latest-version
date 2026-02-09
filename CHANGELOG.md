@@ -1,3 +1,8 @@
+# 6.0.0
+
+- **BREAKING:** Package is now ESM-only and uses named exports. Use `import {getLatestVersion} from 'get-latest-version'` instead of `import getLatestVersion from 'get-latest-version'` or `require('get-latest-version')`
+- **BREAKING:** Minimum Node.js version is now 18 (previously 14.18)
+
 # 5.1.0
 
 - Added new `registryUrl` option

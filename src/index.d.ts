@@ -27,4 +27,4 @@ declare function getLatestVersion(
   optionsOrRange: WithLatestOptions,
 ): Promise<ResolvedVersions>
 
-export default getLatestVersion
+export {getLatestVersion}
