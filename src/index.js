@@ -25,7 +25,7 @@ function resolveRegistryUrl(pkgName, options) {
     return options.registryUrl
   }
   const scope = pkgName.split('/')[0]
-  return registryUrl(scope);
+  return registryUrl(scope)
 }
 
 const httpRequest = getIt([

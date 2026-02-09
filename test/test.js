@@ -22,14 +22,17 @@ test('can get specific version', async () => {
 })
 
 test('can opt-out of sending auth info', async () => {
-  assert.strictEqual(await getLatestVersion('npm', {range: '^1.0.0', auth: false}), '1.4.29')
+  assert.strictEqual(
+    await getLatestVersion('npm', {range: '^1.0.0', auth: false}),
+    '1.4.29',
+  )
 })
 
 test('can use custom registry', async () => {
   const inject = (evt) => {
     assert.strictEqual(
       evt.context.options.url,
-      'https://custom-registry.npmjs.org/@some-scope%2Fsome-library'
+      'https://custom-registry.npmjs.org/@some-scope%2Fsome-library',
     )
     return {body: {'dist-tags': {latest: '1.0.0'}}}
   }
