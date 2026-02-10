@@ -1,3 +1,24 @@
+<!-- markdownlint-disable --><!-- textlint-disable -->
+
+# 📓 Changelog
+
+All notable changes to this project will be documented in this file. See
+[Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
+## [6.0.0](https://github.com/rexxars/get-latest-version/compare/v5.1.0...v6.0.0) (2026-02-10)
+
+### ⚠ BREAKING CHANGES
+
+- Node.js 20 is now the minimum supported version
+- import syntax changed from default to named exports
+- Package is now ESM-only.
+
+### Features
+
+- make node20 minimum supported version ([6cef37c](https://github.com/rexxars/get-latest-version/commit/6cef37cbba6549f15cb9cd45ceeb6d69d0be8be6))
+- migrate to ESM and upgrade dependencies ([7ea6d92](https://github.com/rexxars/get-latest-version/commit/7ea6d9291adaab2d4d97cf95bd588a144622420a))
+- switch to named exports for better IDE support ([7ef60e7](https://github.com/rexxars/get-latest-version/commit/7ef60e71fcff534c774fe12feb431f9bf24e493f))
+
 # 6.0.0
 
 - **BREAKING:** Package is now ESM-only and uses named exports. Use `import {getLatestVersion} from 'get-latest-version'` instead of `import getLatestVersion from 'get-latest-version'` or `require('get-latest-version')`
