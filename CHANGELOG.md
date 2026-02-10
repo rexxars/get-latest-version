@@ -23,6 +23,9 @@ All notable changes to this project will be documented in this file. See
 
 - **BREAKING:** Package is now ESM-only and uses named exports. Use `import {getLatestVersion} from 'get-latest-version'` instead of `import getLatestVersion from 'get-latest-version'` or `require('get-latest-version')`
 - **BREAKING:** Minimum Node.js version is now 20 (previously 14.18)
+- **BREAKING:** Removed undocumented API: `getLatestVersion.request.clone()` and `.use()` methods have been removed
+  - The `getLatestVersion.request` property still exists but is now a simple function without chainable methods
+  - All documented public APIs remain unchanged and fully compatible
 
 # 5.1.0
 

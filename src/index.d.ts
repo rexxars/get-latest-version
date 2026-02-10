@@ -2,6 +2,7 @@ export interface BaseOptions {
   readonly auth?: boolean
   readonly range?: string
   readonly registryUrl?: string
+  readonly signal?: AbortSignal
 }
 export interface WithLatestOptions extends BaseOptions {
   readonly includeLatest: true
