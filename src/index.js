@@ -1,40 +1,8 @@
-import {getIt} from 'get-it'
-import {debug, httpErrors, jsonResponse, promise, retry} from 'get-it/middleware'
-import url from 'node:url'
 import registryAuthToken from 'registry-auth-token'
 import registryUrl from 'registry-url'
 import semver from 'semver'
 
-const isJson = (contentType) => /(application\/json|\+json)/.test(contentType || '')
-
-function resolveRegistryUrl(pkgName, options) {
-  if (options.registryUrl) {
-    return options.registryUrl
-  }
-  const scope = pkgName.split('/')[0]
-  return registryUrl(scope)
-}
-
-function shouldRetry(err, num, options) {
-  const response = err.response || {headers: {}, statusCode: 500}
-
-  return (
-    // allow retries on low-level errors (socket errors et al)
-    retry.shouldRetry(err, num, options) ||
-    // npm registry routinely fails, giving 503 and similar
-    (response && response.statusCode >= 500) ||
-    // npm registry sometimes returns 2xx with HTML content
-    (response.statusCode < 300 && !isJson(response.headers['content-type']))
-  )
-}
-
-const httpRequest = getIt([
-  jsonResponse({force: true}),
-  httpErrors(),
-  debug({namespace: 'get-latest-version'}),
-  promise(),
-  retry({shouldRetry}),
-])
+import {httpRequest} from './http-request.js'
 
 async function getLatestVersion(pkgName, opts) {
   const options =
@@ -43,7 +11,7 @@ async function getLatestVersion(pkgName, opts) {
       : Object.assign({auth: true, range: 'latest'}, opts)
 
   const regUrl = resolveRegistryUrl(pkgName, options)
-  const pkgUrl = url.resolve(regUrl, encodeURIComponent(pkgName).replace(/^%40/, '@'))
+  const pkgUrl = new URL(encodeURIComponent(pkgName).replace(/^%40/, '@'), regUrl).href
   const authInfo = options.auth && registryAuthToken(regUrl, {recursive: true})
   const request = options.request || httpRequest
 
@@ -57,7 +25,7 @@ async function getLatestVersion(pkgName, opts) {
 
   let res
   try {
-    res = await request({headers, url: pkgUrl})
+    res = await request({headers, signal: options.signal, url: pkgUrl})
   } catch (error) {
     if (error.response && error.response.statusCode === 404) {
       throw new Error(`Package \`${pkgName}\` doesn't exist`)
@@ -88,6 +56,14 @@ async function getLatestVersion(pkgName, opts) {
   }
 
   return options.includeLatest ? {inRange: undefined, latest} : undefined
+}
+
+function resolveRegistryUrl(pkgName, options) {
+  if (options.registryUrl) {
+    return options.registryUrl
+  }
+  const scope = pkgName.split('/')[0]
+  return registryUrl(scope)
 }
 
 getLatestVersion.request = httpRequest
