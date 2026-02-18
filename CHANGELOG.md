@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.0.1](https://github.com/rexxars/get-latest-version/compare/v6.0.0...v6.0.1) (2026-02-18)
+
+### Bug Fixes
+
+- `url.parse()` deprecation warning ([6936f40](https://github.com/rexxars/get-latest-version/commit/6936f4032f1fca3e47cd7728d95a583efca69770))
+
 ## [6.0.0](https://github.com/rexxars/get-latest-version/compare/v5.1.0...v6.0.0) (2026-02-10)
 
 ### ⚠ BREAKING CHANGES
