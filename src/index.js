@@ -1,6 +1,5 @@
 import {getIt} from 'get-it'
 import {debug, httpErrors, jsonResponse, promise, retry} from 'get-it/middleware'
-import url from 'node:url'
 import registryAuthToken from 'registry-auth-token'
 import registryUrl from 'registry-url'
 import semver from 'semver'
@@ -43,7 +42,7 @@ async function getLatestVersion(pkgName, opts) {
       : Object.assign({auth: true, range: 'latest'}, opts)
 
   const regUrl = resolveRegistryUrl(pkgName, options)
-  const pkgUrl = url.resolve(regUrl, encodeURIComponent(pkgName).replace(/^%40/, '@'))
+  const pkgUrl = new URL(encodeURIComponent(pkgName).replace(/^%40/, '@'), regUrl).href
   const authInfo = options.auth && registryAuthToken(regUrl, {recursive: true})
   const request = options.request || httpRequest
 
